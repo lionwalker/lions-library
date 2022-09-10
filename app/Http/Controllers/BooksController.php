@@ -31,11 +31,13 @@ class BooksController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
      */
     public function store(Request $request)
     {
-        Book::create($this->validateRequest($request));
+        $book = Book::create($this->validateRequest($request));
+
+        return redirect($book->path());
     }
 
     /**
@@ -65,22 +67,26 @@ class BooksController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $book
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
      */
     public function update(Request $request, Book $book)
     {
         $book->update($this->validateRequest($request));
+
+        return redirect($book->path());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Book  $book
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
      */
-    public function destroy($id)
+    public function destroy(Book $book)
     {
-        //
+        $book->delete();
+
+        return redirect('/books');
     }
 
     /**
